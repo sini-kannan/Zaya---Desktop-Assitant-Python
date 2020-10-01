@@ -1,0 +1,166 @@
+chrome_path = 'C:\Program Files (x86)\Google\Chrome\Application\chrome.exe'
+wb.register(
+ 'chrome', None, wb.BackgroundBrowser(chrome_path))
+ 
+ 
+engine = pyttsx3.init()
+voices = engine.getProperty('voices')
+engine.setProperty('voice', voices[0].id)
+def speak(audio):
+ engine.say(audio)
+ engine.runAndWait()
+speak(" hi , this is zaya , your desktop ai assistant")
+def time():
+Time = datetime.datetime.now().strftime("the current time is , %I:%M:%S"
+)
+ speak(Time)
+ print(Time)
+def date():
+ Date = int(datetime.datetime.now().day)
+ month = int(datetime.datetime.now().month)
+ year = int(datetime.datetime.now().year)
+ speak("today's date is ")
+ speak(Date)
+ speak(month)
+ speak(year)
+ print(Date)
+ print(month)
+ print(year)
+def wishme():
+ hour = datetime.datetime.now().hour
+ if hour >= 4 and hour< 12:
+ speak(" good morning sini !")
+ print(" good morning sini !")
+ elif hour>=12 and hour < 18 :
+ speak(" good afternoon sini !")
+ print(" good afternoon sini !")
+ elif hour >= 18 and hour < 20:
+ speak(" good evening sini !")
+ print(" good evening sini !")
+ else :
+ speak("good night , sini !")
+ print("good night , sini !")
+ speak(" what are we doing today?")
+def takeCommand():
+
+ r = sr.Recognizer()
+
+ with sr.Microphone() as source:
+
+ print("Listening...")
+ speak("listening sini")
+ r.pause_threshold = 1
+ audio = r.listen(source)
+
+ try:
+ print("Recognizing...")
+ speak("please wait while i recognize..")
+ value = r.recognize_google(audio, language ='en-in')
+ print(f"you said: {value}\n")
+
+ speak(value)
+
+ except Exception as e:
+ print(e)
+ print("Unable to Recognizing your voice.")
+ return "None"
+
+ return value
+def sendEmail(to, content):
+ server = smtplib.SMTP('smtp.gmail.com', 587)
+ server.ehlo()
+ server.starttls()
+ server.login(“your username', 'your password')
+ server.sendmail(“ur username”, to, content)
+ server.close()
+def speak_news():
+ url = 'http://newsapi.org/v2/top-headlines?sources=the-times-ofindia&apiKey=46ce30773d0e49e4be64ca81139e9280'
+ news = requests.get(url).text
+ news_dict = json.loads(news)
+ arts = news_dict['articles']
+ print("Reading today's news...")
+ speak('Source: The Times Of India')
+ speak('Todays Headlines are..')
+ for index, articles in enumerate(arts):
+ speak(articles['title'])
+ if index == len(arts)-1:
+ break
+ speak('Moving on the next news headline..')
+ speak('These were the top headlines, Have a nice day sini!!..')
+g = geocoder.ip('me')
+def weather():
+ speak('weather and location report is ....')
+ print('weather and location report is ....')
+ api_url = "https://fcc-weather-api.glitch.me/api/current?lat=" + \
+ str(g.latlng[0]) + "&lon=" + str(g.latlng[1])
+ value = requests.get(api_url)
+ value_json = value.json()
+ if value_json['cod'] == 200:
+ main = value_json['main']
+ wind = value_json['wind']
+ weather_desc = value_json['weather'][0]
+ speak(str(value_json['coord']['lat']) + 'latitude' + str(value_json[
+'coord']['lon']) + 'longitude')
+
+ speak('Current location is ' + value_json['name'] + value_json['sys'
+]['country'] + 'dia')
+ speak('weather type ' + weather_desc['main'])
+ speak('Wind speed is ' + str(wind['speed']) + ' metre per second')
+ speak('Temperature: ' + str(main['temp']) + 'degree celcius')
+ speak('Humidity is ' + str(main['humidity']))
+data = json.load(open('data.json'))
+def meaning(word):
+ word = word.lower()
+ if word in data:
+ speak(data[word])
+ elif len(get_close_matches(word, data.keys())) > 0:
+ x = get_close_matches(word, data.keys())[0]
+ speak('Did you mean ' + x +
+ ' instead, respond with Yes or No.')
+ ans = takeCommand().lower()
+ if 'yes' in ans:
+ speak(data[x])
+ elif 'no' in ans:
+ speak("Word doesn't exist. Please make sure you spelled it corre
+ctly.")
+ else:
+ speak("We didn't understand your entry.")
+ else:
+ speak("Word doesn't exist. Please double check it.")
+def you(textToSearch):
+ value = urllib.parse.quote(textToSearch)
+ url = "https://www.youtube.com/results?search_query=" + value
+ wb.get('chrome').open_new_tab(url)
+ print("opened youtube...")
+
+def games(tr):
+
+ if 'car game' in tr or 'car games' in tr :
+ speak("here is ur favourite car game")
+ print("here is ur favourite car game")
+ url = "https://play.hotwheels.com/en-gb/games/index.html"
+ wb.get('chrome').open_new_tab(url)
+ elif 'cooking games' in tr or 'cooking game' in tr :
+ speak("here is ur favourite cooking game")
+ print("here is ur favourite cooking game")
+ url = "https://papasgames.io/"
+ wb.get('chrome').open_new_tab(url)
+ elif 'farming games' in tr or 'farming game' in tr:
+
+ speak("here is ur favourite farming game")
+ print("here is ur favourite farming game")
+ url = "http://www.agame.com/game/thefarmer?wpud=ODQ1MTU0NDU1MzE3MTMyJTdDMTg3MjE1NzE5NTkyNCU3QzE1NTY3OTcxOTU5MjQl
+N0MwJTdDMTU5NzEzNzc5MDU0NSU3QzE1OTcxMzc3OTA1NDUlN0MxNTk3MTM3NzkwNTQ0JTdDMTU5
+NzEzNzc5MDU0NQ=="
+ wb.get('chrome').open_new_tab(url)
+def corona():
+ r = requests.get('https://coronavirus-19-api.herokuapp.com/all')
+ data = r.json()
+ text = f'Confirmed Cases : {data["cases"]} \nDeaths : {data["deaths"]} \
+nRecovered : {data["recovered"]}'
+
+ speak("the corona updates are...")
+ print("the corona updates are...")
+ speak(text)
+ speak("please be safe sini... ")
+ print("please be safe sini... ")
