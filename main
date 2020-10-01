@@ -1,0 +1,97 @@
+if __name__ == "__main__" :
+ wishme()
+ while True :
+ value = takeCommand().lower()
+ if 'time' in value :
+ time()
+ elif 'date' in value :
+ date()
+ elif 'wikipedia' in value:
+ speak('Searching wikipedia')
+ print('Searching wikipedia')
+ value = value.replace("wikipedia", "")
+ results = wikipedia.summary(f'{value}', sentences=2 )
+ speak("According to Wikipedia")
+ speak(results)
+
+ elif "restart" in value:
+ subprocess.call(["shutdown", "/r"])
+
+ elif "hibernate" in value or "sleep" in value:
+ speak("Hibernating")
+ subprocess.call("shutdown / h")
+
+ elif "log off" in value or "shutdown" in value:
+
+ speak("Make sure all the application are closed before signout")
+ time.sleep(5)
+ subprocess.call(["shutdown", "/l"])
+
+ elif 'image' in value or 'images' in value :
+ speak("what image do u like to open?")
+ er = takeCommand().lower()
+ image = mpimg.imread(er + '.jpg')
+ plt.imshow(image)
+ plt.show()
+
+ elif 'open google' in value:
+ url = "www.google.com"
+ wb.get('chrome').open_new_tab(url)
+ elif 'send a mail' in value:
+ try:
+ speak("What should I say?")
+ content = takeCommand()
+ speak("whome should i send")
+ to = input()
+ sendEmail(to, content)
+ speak("Email has been sent !")
+ print("Email has been sent !")
+ except Exception as e:
+ print(e)
+ speak("I am not able to send this email")
+ elif "camera" in value or "take a photo" in value:
+ ec.capture(0, "Zaya's Camera ", "img.jpg")
+
+ elif 'weather' in value:
+ weather()
+ elif 'location' in value:
+ weather()
+
+ elif 'news' in value:
+ speak_news()
+
+ elif 'meaning' in value :
+ speak('say a word , sini ?')
+ print('say a word , sini ?')
+ x = takeCommand().lower()
+ meaning(x)
+ 
+
+ elif 'video' in value:
+ speak(" what to search , sini ?")
+ xr = takeCommand().lower()
+ you(xr)
+ elif 'games' in value or 'game' in value or 'play' in value :
+ speak('what game you wanna play ?')
+ speak('car games? farming games? cooking games ?')
+ tr = takeCommand().lower()
+ games(tr)
+ elif 'joke' in value:
+ speak(pyjokes.get_joke())
+ print(pyjokes.get_joke())
+ speak("hahahaha , it was funny , right sini ?")
+ elif 'music' in value or "song" in value:
+ speak("enjoy ur favourite songs sini")
+ print("here you go with your favourite songs....")
+ # music_dir = "G:\\Song"
+ music_dir = "C:\\Users\\Dell\\Music"
+ songs = os.listdir(music_dir)
+ print(songs)
+ random = os.startfile(os.path.join(music_dir, songs[1]))
+ elif "corona" in value or "covid-19" in value :
+ corona()
+ elif 'thank you' in value :
+ speak('have a nice day !')
+ speak("bye sini !")
+ print("bye sini !")
+ quit()
