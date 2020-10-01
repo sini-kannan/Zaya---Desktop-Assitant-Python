@@ -1,0 +1,25 @@
+import pyttsx3
+import datetime
+import speech_recognition as sr
+import wikipedia
+import subprocess
+import smtplib
+import webbrowser as wb
+from ecapture import ecapture as ec
+import os
+import json
+import requests
+import geocoder
+from newsapi import NewsApiClient
+import bootstrap_difflib
+from urllib.request import urlopen
+import urllib.parse
+import re
+from bs4 import BeautifulSoup
+from time import sleep
+import pyjokes
+import wolframalpha
+import matplotlib.pyplot as plt
+import matplotlib.image as mpimg
+from win10toast import ToastNotifier
+
